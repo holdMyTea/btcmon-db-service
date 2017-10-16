@@ -4,22 +4,17 @@ import vars from '../config/variables.js'
 
 mongoose.Promise = global.Promise
 
-mongoose.connect(
-  'mongodb://' + vars.DB_HOST + '/' + vars.DB_NAME,
-  {useMongoClient: true}
-)
+const connection = mongoose.createConnection(vars.DB_HOST, vars.DB_NAME)
 
-const db = mongoose.connection
+connection.on('error', () => { throw new Error('db connection failed') })
+connection.once('open', () => {
+  console.log('db connection established')
+  connection.db.listCollections().toArray((err, names) => {
+    console.log(names)
+  })
+})
 
-db.on('error', () => { throw new Error('db connection failed') })
-db.once('open', () => console.log('db connection established'))
-
-const entrySchema = mongoose.Schema({
-  timestamp: Date,
-  value: Number
-}, {collection: vars.DB_COLLECTION})
-
-const EntryModel = mongoose.model('Entry', entrySchema)
+//const EntryModel = mongoose.model('Entry', entrySchema)
 
 function addEntry (timestamp, value) {
   const entry = new EntryModel({
@@ -44,4 +39,8 @@ function getEntries () {
   })
 }
 
-export default {addEntry, getEntries}
+function getCollectionsNames () {
+  return Object.keys(connection.collections)
+}
+
+export default {addEntry, getEntries, getCollectionsNames}
