@@ -19,7 +19,9 @@ function generateRoute (collection) {
 export default (collections) => {
   let routes = []
 
-  collections.forEach((collection) => routes.push(generateRoute(collection)))
+  collections.forEach(
+    (collection) => routes.push(generateRoute(collection))
+  )
 
   return routes
 }
