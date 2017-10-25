@@ -1,24 +1,48 @@
-import schema from '../services/schema.js'
+import DBmodel from '../services/model.js'
 
-function insertDocument (s, request, response) {
+function insert (Model, request, response) {
   const body = request.body
 
   if (body.value && body.timestamp) {
-    s.addEntry(body.timestamp, body.value, (results) => response.send('Inserting: ' + body))
-    console.log('Inserting: ' + body)
+    const entry = new Model({
+      timestamp: body.timestamp,
+      value: body.value
+    })
+
+    entry.markModified('timestamp')
+
+    entry.save().then((result) => response.send(result))
   } else {
     response.status(400).send('Bad arguments')
   }
 }
 
-function getAllDocumnets (s, request, response) {
-  s.getEntries((results) => response.send('All: ' + results))
+function getAll (model, request, response) {
+  model.find().exec((err, result) => {
+    if (err) throw err
+
+    response.send(result)
+  })
+}
+
+function getInRange (model, request, response) {
+  console.log(request.params)
+  model.find()
+    .where('timestamp')
+      .gte(new Date(Number(request.params.startDate)))
+      .lte(new Date(Number(request.params.endDate)))
+  .exec((err, result) => {
+    if (err) throw err
+
+    response.send(result)
+  })
 }
 
 export default (collection) => {
-  const s = schema(collection)
+  const model = DBmodel(collection)
   return {
-    insertDocument: (request, response) => insertDocument(s, request, response),
-    getAllDocumnets: (request, response) => getAllDocumnets(s, request, response)
+    insert: (request, response) => insert(model, request, response),
+    getAll: (request, response) => getAll(model, request, response),
+    getInRange: (request, response) => getInRange(model, request, response)
   }
 }

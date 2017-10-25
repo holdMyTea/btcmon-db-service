@@ -7,8 +7,10 @@ function generateRoute (collection) {
   const controller = controllerGenerator(collection)
 
   router.route('/')
-    .get(controller.getAllDocumnets)
-    .put(controller.insertDocument)
+    .get(controller.getAll)
+    .put(controller.insert)
+
+  router.get('/:startDate/:endDate', controller.getInRange)
 
   return {
     collection: collection,
