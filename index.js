@@ -25,17 +25,3 @@ connection.waitForConnection(() => {
 })
 
 export default app
-
-/*
-  Grand Battleplan:
-
-  1. this piece (db-service) gets it's part of config from the global one (not a good move, i know)
-  2. in it there is a list of all possible resources, we'll be grabbing data from
-  3. from this list it generates routes and controllers
-
-  Currently:
-  it does it, except there are echo methods instead of real db stuff (soon)
-
-  P.S. stupid file, folder and var names
-
-*/
