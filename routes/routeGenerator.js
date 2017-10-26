@@ -10,6 +10,8 @@ function generateRoute (collection) {
     .get(controller.getAll)
     .put(controller.insert)
 
+  router.get('/lastInsert', controller.getLastInsert)
+
   router.get('/:startDate/:endDate', controller.getInRange)
 
   return {
