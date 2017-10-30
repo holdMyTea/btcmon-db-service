@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import db from './connection.js'
+import db from '../services/connection.js'
 
 export default (collection) => {
   const entrySchema = mongoose.Schema({

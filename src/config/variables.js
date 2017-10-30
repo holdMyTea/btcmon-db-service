@@ -1,4 +1,4 @@
-export default ['APP_HOST', 'APP_PORT', 'DB_HOST', 'DB_NAME', 'DB_COLLECTION']
+export default ['APP_HOST', 'APP_PORT', 'DB_HOST', 'DB_NAME']
 .reduce((acc, val) => {
   if (process.env[val]) {
     acc[val] = process.env[val]

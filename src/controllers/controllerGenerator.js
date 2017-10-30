@@ -1,4 +1,4 @@
-import DBmodel from '../services/model.js'
+import DBmodel from '../models/model.js'
 
 function insert (Model, request, response) {
   const body = request.body
