@@ -11,15 +11,15 @@ import connection from './services/connection.js'
 
 const app = express()
 
-connection.waitForConnection(() => {
-  app.use(bodyParser.json())
-  app.use(morgan('common'))
+app.use(bodyParser.json())
+app.use(morgan('common'))
 
-  for (let route of routeGenerator(config)) {
+app.get('/', (request, response) => response.send('db-service sends it\'s greetings'))
+
+connection.waitForConnection(async () => {
+  for (let route of routeGenerator(await config())) {
     app.use('/' + route.collection, route.router)
   }
-
-  app.get('/', (request, response) => response.send('db-service sends it\'s greetings'))
 
   app.listen(vars.APP_PORT, vars.APP_HOST, () => console.log('db-service is listening'))
 })
