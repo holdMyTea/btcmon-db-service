@@ -21,7 +21,7 @@ connection.waitForConnection(async () => {
     app.use('/' + route.collection, route.router)
   }
 
-  app.listen(vars.PUT_PORT, vars.PUT_HOST, () => console.log('db-service is listening'))
+  app.listen(vars.DB_SERVICE_PORT, vars.DB_SERVICE_HOST, () => console.log('db-service is listening'))
 })
 
 export default app

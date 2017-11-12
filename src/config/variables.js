@@ -1,4 +1,4 @@
-export default ['PUT_HOST', 'PUT_PORT', 'DB_HOST', 'DB_NAME', 'CONFIG_HOST', 'CONFIG_PORT']
+export default ['DB_SERVICE_HOST', 'DB_SERVICE_PORT', 'DB_HOST', 'DB_NAME', 'CONFIG_HOST', 'CONFIG_PORT']
 .reduce((acc, val) => {
   if (process.env[val]) {
     acc[val] = process.env[val]
