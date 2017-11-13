@@ -29,20 +29,22 @@ function getInRange (model, request, response) {
   console.log(request.params)
   model.find()
     .where('timestamp')
-      .gte(new Date(Number(request.params.startDate)))
-      .lte(new Date(Number(request.params.endDate)))
-  .exec((err, result) => {
-    if (err) throw err
+    .gte(new Date(Number(request.params.startDate)))
+    .lte(new Date(Number(request.params.endDate)))
+    .exec((err, result) => {
+      if (err) throw err
 
-    response.send(result)
-  })
+      response.send(result)
+    })
 }
 
 function getLastInsert (model, request, response) {
   model.find().sort({timestamp: -1}).limit(1).exec((err, result) => {
     if (err) throw err
 
-    response.send(new Date(result[0].timestamp))
+    if (result[0]) {
+      response.send(new Date(result[0].timestamp))
+    } else response.send(new Date(0))
   })
 }
 
