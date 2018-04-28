@@ -1,17 +1,21 @@
 import DBmodel from '../models/model.js'
+import moment from 'moment'
 
 function insert (Model, request, response) {
   const body = request.body
 
   if (body.value && body.timestamp) {
     const entry = new Model({
-      timestamp: body.timestamp,
+      timestamp: moment(body.timestamp).toDate(),
       value: body.value
     })
 
     entry.markModified('timestamp')
 
-    entry.save().then((result) => response.send(result))
+    entry.save().then((result) => {
+      console.log(result)
+      response.send(result)
+    })
   } else {
     response.status(400).send('Bad arguments')
   }
@@ -29,8 +33,8 @@ function getInRange (model, request, response) {
   console.log(request.params)
   model.find()
     .where('timestamp')
-    .gte(new Date(Number(request.params.startDate)))
-    .lte(new Date(Number(request.params.endDate)))
+    .gte(moment(Number(request.params.startDate)).toDate()) // casting to js Date, bc Mongo
+    .lte(moment(Number(request.params.endDate)).toDate())
     .exec((err, result) => {
       if (err) throw err
 
@@ -43,8 +47,8 @@ function getLastInsert (model, request, response) {
     if (err) throw err
 
     if (result[0]) {
-      response.send(new Date(result[0].timestamp))
-    } else response.send(new Date(0))
+      response.send(moment(result[0].timestamp).format())
+    } else response.send(moment(0).format()) // using format() here, bc otherwise express will parse this as HTTP status and throw error
   })
 }
 
