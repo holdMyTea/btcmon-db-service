@@ -35,6 +35,7 @@ function getInRange (model, request, response) {
     .where('timestamp')
     .gte(moment(Number(request.params.startDate)).toDate()) // casting to js Date, bc Mongo
     .lte(moment(Number(request.params.endDate)).toDate())
+    .select({timestamp: 1, value: 1, _id: 0})
     .exec((err, result) => {
       if (err) throw err
 
